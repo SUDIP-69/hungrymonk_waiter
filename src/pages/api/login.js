@@ -1,34 +1,39 @@
 import conndb from "../../../Middlewire/conndb";
 import User from "../../../Models/User";
 import bcrypt from 'bcrypt'
+var jwt = require('jsonwebtoken')
 
 const handler = async (req, res) => {
   try {
     if (req.method == "POST") {
       const { username, password } = req.body;
-      console.log(username, password);
+      //console.log(username, password);
       if (username) {
         const users = await User.findOne({ username });
-        //console.log(users);
+        console.log(users);
         if (users) {
           const ismatch = await bcrypt.compare(password, users.password);
-          //console.log(ismatch);
+          console.log(ismatch);
           if (ismatch) {
-            res.json({ success: true });
+              const token =jwt.sign({name:users.name},'qwerty')
+              console.log(token);
+            res.json({ success: true,token:token });
           } else {
-            throw new error();
+            res.json({ success: false,token:null });
           }
         } else {
           res.json({ success: false });
         }
+      }else{
+        res.status(201).json({ success: false, token:null });
       }
 
-      res.status(201).json({ success: true, data: "data" });
+      
     } else {
-      res.status(501).json({ success: false, data: "data" });
+      res.status(201).json({ success: false, token:null });
     }
   } catch (error) {
-    res.status(501).json({ success: false, data: "data" });
+    res.status(201).json({ success: false, token:null });
   }
 };
 

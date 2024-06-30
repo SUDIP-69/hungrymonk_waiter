@@ -1,9 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Accordion from "../Components/Accordion";
 import DetailedView from "../Components/DetailedView";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import logo from "../assets/baksish1.png";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Table } from "@mui/material";
 
 export default function Home() {
+  
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!localStorage.getItem("accessToken")) {
+      window.location = "/";
+    }
+  }, []);
+
   const item = {
     success: true,
     data: [
@@ -196,6 +210,12 @@ export default function Home() {
     setOpenAccordion(openAccordion === id ? null : id);
   };
 
+  const handleClick = (e) => {
+    e.preventDefault()
+    localStorage.removeItem("accessToken")
+    router.push("/")
+  }
+
   const tableOrders = item.data.reduce((acc, order) => {
     if (!acc[order.table_number]) {
       acc[order.table_number] = [];
@@ -207,8 +227,23 @@ export default function Home() {
   return (
     <>
       <header className="bg-[#4E0433] p-4 text-white font-bold tracking-widest text-center text-2xl">
-        ORDER
+        <div>
+          <div className="flex justify-between items-center">
+            <div className="bg-[#FAFAFA] p-2 rounded-lg w-24 shadow-md shadow-[#AFAFAF]">
+            <Image alt="logo" width={100} height={10000} src={logo} />
+            </div>
+            <a onClick={handleClick}>
+              <ExitToAppIcon />
+            </a>
+          </div>
+        </div>
       </header>
+      <div>
+        <div className="flex font-extrabold tracking-widest text-2xl justify-center items-center mt-2">
+          ORDERS
+        </div>
+        <hr className="h-[2px] mx-auto bg-[#4E0433] mb-5 rounded-2xl w-32" />
+      </div>
       <main>
         {Object.keys(tableOrders).map((tableNumber, index) => (
           <Accordion
@@ -217,6 +252,7 @@ export default function Home() {
             onToggle={() => handleToggle(tableNumber)}
             id={tableNumber}
             isOpen={openAccordion === tableNumber}
+            status={tableOrders[tableNumber]}
             item={tableOrders[tableNumber]}
           >
             <DetailedView orders={tableOrders[tableNumber]} />

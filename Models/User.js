@@ -6,6 +6,18 @@ const UserSchema = new mongoose.Schema({
     },password:{
         type:String,
         required:true,
+    },email:{
+        type:String,
+        required:true,
+    },phoneNo:{
+        type:String,
+        required:true,
+    },name:{
+        type:String,
+        required:true,
+    },resID:{
+        type:String,
+        required:true,
     }
 
 },{timestamps: true});

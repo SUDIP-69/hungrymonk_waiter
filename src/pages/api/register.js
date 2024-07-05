@@ -1,5 +1,5 @@
 import conndb from "../../../Middlewire/conndb";
-import User from "../../../Models/User";
+import User from "../../../models/User";
 import bcrypt from 'bcrypt'
 
 const handler =async (req, res) => {

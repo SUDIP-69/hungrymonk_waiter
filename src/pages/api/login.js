@@ -1,7 +1,7 @@
 import conndb from "../../../Middlewire/conndb";
-import User from "../../../Models/User";
-import bcrypt from 'bcrypt'
-var jwt = require('jsonwebtoken')
+import User from "../../../models/User";
+import bcrypt from "bcrypt";
+var jwt = require("jsonwebtoken");
 
 const handler = async (req, res) => {
   try {
@@ -10,30 +10,32 @@ const handler = async (req, res) => {
       //console.log(username, password);
       if (username) {
         const users = await User.findOne({ username });
-        console.log(users);
+        //console.log(users);
         if (users) {
           const ismatch = await bcrypt.compare(password, users.password);
-          console.log(ismatch);
+          //console.log(ismatch);
           if (ismatch) {
-              const token =jwt.sign({name:users.name},'qwerty')
-              console.log(token);
-            res.json({ success: true,token:token });
+            const token = jwt.sign({ name: users.name }, "qwerty");
+            //console.log(token);
+            res.json({
+              success: true,
+              token: token,
+              restaurant_id: users.resID,
+            });
           } else {
-            res.json({ success: false,token:null });
+            res.json({ success: false, token: null });
           }
         } else {
           res.json({ success: false });
         }
-      }else{
-        res.status(201).json({ success: false, token:null });
+      } else {
+        res.status(201).json({ success: false, token: null });
       }
-
-      
     } else {
-      res.status(201).json({ success: false, token:null });
+      res.status(201).json({ success: false, token: null });
     }
   } catch (error) {
-    res.status(201).json({ success: false, token:null });
+    res.status(201).json({ success: false, token: null });
   }
 };
 

@@ -5,15 +5,15 @@ import SingleOrders from "../../../models/SingleOrders";
 const handler = async (req, res) => {
   if (req.method === "POST") {
     console.log(req.body)
-    const {singleOrderId } = req.body;
+    const {orderId } = req.body;
     try {
-      const order = await SingleOrders.findByIdAndUpdate(singleOrderId,{status:"Confirmed" });
+      const order = await Orders.findOneAndUpdate({order_id: orderId},{order_status:"waitingforbill"});
       console.log(order)
       if (!order) {
-        return res.status(404).json({ success: false, message: "Order not found" });
+        res.status(404).json({ success: false, message: "Order not found" });
       }
       else{
-      return res.status(200).json({ success: true, data: order });
+        res.status(200).json({ success: true, data: order });
       }
     } catch (error) {
       console.error("Error updating order status:", error);

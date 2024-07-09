@@ -1,17 +1,12 @@
-// models/FoodItems.js
 import mongoose from 'mongoose';
 
-const fooditems = new mongoose.Schema({
+const foodItemsSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
     },
     description: {
         type: String,
-    },
-    quantity: {
-        type: String,
-        default: "1",
     },
     price: {
         type: String,
@@ -31,4 +26,4 @@ const fooditems = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-export default mongoose.models.FoodItems || mongoose.model("FoodItems", fooditems);
+export const FoodItems = mongoose.models.FoodItems || mongoose.model('FoodItems', foodItemsSchema);

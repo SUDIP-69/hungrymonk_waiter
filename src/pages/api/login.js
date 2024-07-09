@@ -1,4 +1,4 @@
-import conndb from "../../../Middlewire/conndb";
+import conndb from "../../../middleware/conndb";
 import User from "../../../models/User";
 import bcrypt from "bcrypt";
 var jwt = require("jsonwebtoken");

@@ -1,5 +1,5 @@
-// models/Orders.js
 import mongoose from 'mongoose';
+import { singleOrders } from './SingleOrders';
 
 const orders = new mongoose.Schema({
     customer_id: {
@@ -11,25 +11,26 @@ const orders = new mongoose.Schema({
     restaurant_id: {
         type: String,
     },
-    table_number: {
+    table_number:{
         type: String,
     },
-    order_items: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'SingleOrders'
-    }],
+    order_items: [{type: mongoose.Schema.Types.ObjectId,
+        ref: 'SingleOrders'}],
     initial_bill: {
         type: String,
     },
     tax: {
         type: String,
     },
+    discount:{
+        type:String,
+    },
     total_bill: {
         type: String,
     },
-    order_status: {
+    order_status:{
         type: String,
     }
-}, { timestamps: true });
+}, { timestamps: true })
 
-export default mongoose.models.Orders || mongoose.model("Orders", orders);
+export default mongoose.models.Orders || mongoose.model("Orders", orders)

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 
 function DetailedView({ orders }) {
+  console.log(orders);
   const router = useRouter();
 
   const handleClick = (ord) => {

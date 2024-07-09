@@ -5,7 +5,7 @@ const conndb = (handler) => (req, res) => {
     return handler(req,res);
   } else {
     mongoose
-      .connect(process.env.MONGOURI)
+      .connect(process.env.MONGODB_URI)
       return handler(req,res);
   }
 };

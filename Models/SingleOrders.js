@@ -1,13 +1,12 @@
-// models/SingleOrders.js
 import mongoose from 'mongoose';
+import { fooditems } from './FoodItems';
 
-const singleOrders = new mongoose.Schema({
-    items: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'FoodItems'
-    }],
-    notes: {
-        type: String,
+
+export const singleOrders = new mongoose.Schema({
+    items: [{type: mongoose.Schema.Types.ObjectId,
+        ref: 'OrderFoodItems'}],
+    notes:{
+        type:String,
     },
     item_total: {
         type: String,
@@ -21,9 +20,9 @@ const singleOrders = new mongoose.Schema({
     estimated_time: {
         type: String,
     },
-    status: {
+    status:{
         type: String,
     }
-}, { timestamps: true });
+}, { timestamps: true })
 
-export default mongoose.models.SingleOrders || mongoose.model("SingleOrders", singleOrders);
+export default mongoose.models.SingleOrders || mongoose.model("SingleOrders", singleOrders)

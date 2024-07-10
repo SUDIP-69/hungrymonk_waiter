@@ -14,6 +14,7 @@ function Loginpage() {
   const router = useRouter();
 
   const handlesubmit = async (event) => {
+    console.log("sdxfcgvhbj")
     event.preventDefault();
     setIsLoading(true);
 
@@ -30,14 +31,10 @@ function Loginpage() {
         setuser("");
         toast.success("Successfully logged in", { id: toastId });
         localStorage.setItem("accessToken", token);
-        setTimeout(() => {
-          router.push("/ViewOrder");
-        }, 1000);
+        router.push("/ViewOrder");
       } else {
         toast.error("Failed to login", { id: toastId });
-        setTimeout(() => {
           window.location.reload();
-        }, 1000);
       }
     } catch (error) {
       toast.error("An error occurred. Please try again.", { id: toastId });
@@ -59,7 +56,7 @@ function Loginpage() {
       </header>
 
       <main>
-        <form onSubmit={handlesubmit} className="max-w-xl mx-auto mt-40 p-6">
+        <form className="max-w-xl mx-auto mt-40 p-6">
           <div className="flex font-extrabold tracking-widest text-2xl justify-center items-center -mt-10">
             LOGIN
           </div>
@@ -104,7 +101,8 @@ function Loginpage() {
             </label>
           </div>
           <button
-            type="submit"
+            type="button"
+            onClick={handlesubmit}
             className="text-white bg-[#4E0433] hover:bg-[#4E0433] focus:ring-4 focus:outline-none focus:ring-[#4E0433] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
             disabled={isLoading}
           >

@@ -40,7 +40,7 @@ function ViewOrder() {
       //console.log(data);
 
       if (data.success) {
-        //setOrders(data.data);
+        setOrders(data.data);
       } else {
         window.location.reload();
       }

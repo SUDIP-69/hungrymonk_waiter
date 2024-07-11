@@ -14,7 +14,7 @@ function Loginpage() {
   const router = useRouter();
 
   const handlesubmit = async (event) => {
-    console.log("sdxfcgvhbj")
+    // console.log("sdxfcgvhbj")
     event.preventDefault();
     setIsLoading(true);
 

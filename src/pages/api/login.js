@@ -10,7 +10,7 @@ const handler = async (req, res) => {
       //console.log(username, password);
       if (username) {
         const users = await Waiter_credentials.findOne({ username });
-        console.log(users);
+        //console.log(users);
         if (users) {
           const ismatch = await bcrypt.compare(password, users.password);
           //console.log(ismatch);

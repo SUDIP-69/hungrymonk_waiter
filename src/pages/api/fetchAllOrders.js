@@ -49,7 +49,7 @@ const handler = async (req, res) => {
         if(orders.length > 0) {
       res.status(200).json({ success: true, data: orders });
         } else {
-        res.status(404).json({ success: false, data: "No orders found" });
+        res.status(200).json({ success: false, data: null });
       }
     }
   } catch (error) {

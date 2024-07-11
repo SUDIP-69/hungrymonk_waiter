@@ -1,36 +1,42 @@
-import mongoose from 'mongoose';
-import { singleOrders } from './SingleOrders';
-
-const orders = new mongoose.Schema({
+import mongoose from "mongoose";
+import { singleOrders } from "./SingleOrders";
+const orders = new mongoose.Schema(
+  {
     customer_id: {
-        type: String,
+      type: String,
     },
     order_id: {
-        type: String,
+      type: String,
     },
     restaurant_id: {
-        type: String,
+      type: String,
     },
-    table_number:{
-        type: String,
+    table_number: {
+      type: String,
     },
-    order_items: [{type: mongoose.Schema.Types.ObjectId,
-        ref: 'SingleOrders'}],
+    order_items: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "SingleOrders" },
+    ],
+    total_quantity: {
+      type: String,
+    },
     initial_bill: {
-        type: String,
+      type: String,
     },
     tax: {
-        type: String,
+      type: String,
     },
-    discount:{
-        type:String,
+    discount: {
+      type: String,
     },
     total_bill: {
-        type: String,
+      type: String,
     },
-    order_status:{
-        type: String,
-    }
-}, { timestamps: true })
+    order_status: {
+      type: String,
+    },
+  },
+  { timestamps: true }
+);
 
-export default mongoose.models.Orders || mongoose.model("Orders", orders)
+export default mongoose.models.Orders || mongoose.model("Orders", orders);

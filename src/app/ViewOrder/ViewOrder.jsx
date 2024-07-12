@@ -10,12 +10,37 @@ import axios from "axios";
 import LoadingPage from "../Components/LoadingPage";
 import Link from "next/link";
 import { TaskAlt } from "@mui/icons-material";
-
+import  noorder from '../assets/noorder.jpg'
+ 
 function ViewOrder() {
   const router = useRouter();
   const [orders, setOrders] = useState(null);
   const [openAccordion, setOpenAccordion] = useState(null);
   const [servedOrders, setServedOrders] = useState(new Set());
+  const [isLoading, setIsLoading] = useState(true); // State to manage loading indicator
+  const [error, setError] = useState(null); // State to manage error messages
+
+  const fetchOrders = async () => {
+    const restaurant_id = localStorage.getItem("restaurant_id");
+    try {
+      const { data } = await axios.post(`/api/fetchAllOrders`, {
+        restaurant_id,
+      });
+      console.log(data);
+
+      if (data.success) {
+        setOrders(data.data);
+      } else {
+        setOrders([]);
+      }
+    } catch (error) {
+      console.error("Error fetching orders", error);
+      setError("Failed to fetch orders. Please try again.");
+      setOrders([]);
+    } finally {
+      setIsLoading(false); // Set loading to false after fetching orders
+    }
+  };
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
@@ -30,24 +55,6 @@ function ViewOrder() {
       return () => clearInterval(intervalId);
     }
   }, []);
-
-  const fetchOrders = async () => {
-    const restaurant_id = localStorage.getItem("restaurant_id");
-    try {
-      const { data } = await axios.post(`/api/fetchAllOrders`, {
-        restaurant_id,
-      });
-      //console.log(data);
-
-      if (data.success) {
-        setOrders(data.data);
-      } else {
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error("Error fetching orders", error);
-    }
-  };
 
   const handleToggle = (id) => {
     setOpenAccordion(openAccordion === id ? null : id);
@@ -79,25 +86,18 @@ function ViewOrder() {
     return new Date(b.updatedAt) - new Date(a.updatedAt);
   });
 
-  if (!sortedOrders)
-    return (
-      <>
-        <LoadingPage />
-      </>
-    );
-
   return (
     <>
       <header className="bg-[#4E0433] p-4 text-white poppins-bold tracking-widest text-center text-2xl">
         <div>
           <div className="flex justify-between items-center">
             <div
-              className="bg-[#FAFAFA] p-2 rounded-lg w-24 shadow-md shadow-[#AFAFAF]"
+              className="bg-[#FAFAFA] p-2 rounded-lg w-24 shadow-md shadow-[#AFAFAF] cursor-pointer"
               onClick={() => router.push("/ViewOrder")}
             >
               <Image alt="logo" width={100} height={10000} src={logo} />
             </div>
-            <a onClick={handleClick}>
+            <a onClick={handleClick} className="cursor-pointer">
               <ExitToAppIcon />
             </a>
           </div>
@@ -110,7 +110,13 @@ function ViewOrder() {
         <hr className="h-[2px] mx-auto bg-[#4E0433] mb-8 rounded-2xl w-32" />
       </div>
       <main className="mb-16">
-        {sortedOrders &&
+        {isLoading ? (
+          <LoadingPage />
+        ) : error ? (
+          <div className="flex justify-center items-center text-xl mt-10 text-red-600">
+            {error}
+          </div>
+        ) : sortedOrders && sortedOrders.length > 0 ? (
           sortedOrders.map((tableorder, index) => (
             <div key={index}>
               <div className="relative">
@@ -118,9 +124,9 @@ function ViewOrder() {
                   onClick={() =>
                     router.push(`/OrderDetails?order=${tableorder.order_id}`)
                   }
-                  className=" mx-2 pb-3 relative rounded-xl bg-[#ffffff] shadow-md hover:bg-gray-100"
+                  className="mx-2 pb-3 relative rounded-xl bg-[#ffffff] shadow-md hover:bg-gray-100 cursor-pointer"
                 >
-                  <div className="flex justify-between w-full  px-5 pt-5 pb-2 text-left text-[#565556] text-xl poppins-semibold ">
+                  <div className="flex justify-between w-full px-5 pt-5 pb-2 text-left text-[#565556] text-xl poppins-semibold ">
                     Table - {tableorder.table_number}
                     <div className="flex items-center">
                       <span
@@ -171,11 +177,32 @@ function ViewOrder() {
                 <button
                   onClick={() => handleServed(tableorder._id)}
                   className={`z-0 space-x-1 absolute right-2 bottom-1 p-2 py-1 border-2 ${
-                    (servedOrders.has(tableorder._id) || tableorder.order_status == 'served') ? 'bg-green-800' : 'bg-blue-500'
-                  } shadow-lg poppins-regular text-[0.65rem] rounded-lg text-[#fff9ea] border-white flex justify-center items-center`}
+                    servedOrders.has(tableorder._id) ||
+                    tableorder.order_status == "served"
+                      ? "bg-green-800"
+                      : "bg-blue-500"
+                  } shadow-lg poppins-regular text-[0.65rem] rounded-lg text-[#fff9ea] border-white flex justify-center items-center ${
+                    servedOrders.has(tableorder._id) ||
+                    tableorder.order_status == "served"
+                      ? "cursor-default"
+                      : "cursor-pointer"
+                  }`}
+                  disabled={
+                    servedOrders.has(tableorder._id) ||
+                    tableorder.order_status == "served"
+                  }
                 >
-                  {(tableorder.order_status == 'served') ? <><TaskAlt />
-                    <span>Served</span></> : <><TaskAlt /><span>Mark as Served</span></>}
+                  {tableorder.order_status == "served" ? (
+                    <>
+                      <TaskAlt />
+                      <span>Served</span>
+                    </>
+                  ) : (
+                    <>
+                      <TaskAlt />
+                      <span>Mark as Served</span>
+                    </>
+                  )}
                 </button>
               </div>
 
@@ -183,13 +210,24 @@ function ViewOrder() {
                 <hr className="border-[1px] border-black w-full mx-8 border-dotted" />
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <div className="flex flex-col justify-center items-center text-xl mt-10">
+            <Image
+              alt="No Orders"
+              src={noorder}
+              width={150}
+              height={150}
+            />
+            <p>No orders found.</p>
+          </div>
+        )}
       </main>
       <div className="bg-[#4E0433] fixed bottom-0 w-full p-5 text-white poppins-bold tracking-widest text-center text-2xl">
         <div>
           <Link
             href={`/SearchItems?id=neworder`}
-            className="text-lg py-2 z-50 px-4 font-medium rounded-xl text-black bg-[#FFF9EB]"
+            className="text-lg py-2 z-50 px-4 font-medium rounded-xl text-black bg-[#FFF9EB] hover:bg-[#e0d8c3]"
           >
             <CreateIcon /> Create a new order
           </Link>

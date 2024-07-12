@@ -45,11 +45,11 @@ const handler = async (req, res) => {
             }
           }
         });
-        // console.log(orders);
+        console.log("ord",orders);
         if(orders.length > 0) {
       res.status(200).json({ success: true, data: orders });
         } else {
-        res.status(200).json({ success: false, data: null });
+        res.status(200).json({ success: true, data: null });
       }
     }
   } catch (error) {

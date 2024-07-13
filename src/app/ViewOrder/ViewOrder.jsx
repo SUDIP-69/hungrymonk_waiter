@@ -97,8 +97,8 @@ function ViewOrder() {
             >
               <Image alt="logo" width={100} height={10000} src={logo} />
             </div>
-            <a onClick={handleClick} className="cursor-pointer">
-              <ExitToAppIcon />
+            <a onClick={handleClick} className="cursor-pointer text-base">
+             Signout <ExitToAppIcon />
             </a>
           </div>
         </div>
@@ -130,7 +130,7 @@ function ViewOrder() {
                     Table - {tableorder.table_number}
                     <div className="flex items-center">
                       <span
-                        className={`rounded-full border-[1px] border-black ${
+                        className={`rounded-full w-10 h-10 border-[1px] border-black ${
                           tableorder.order_status == "updated"
                             ? "bg-[#e0f903]"
                             : tableorder.order_status == "new"

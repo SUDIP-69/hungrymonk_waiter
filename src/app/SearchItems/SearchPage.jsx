@@ -8,6 +8,7 @@ import Orderviewer from '../Components/Orderviewer';
 import axios from 'axios';
 import LoadingPage from '../Components/LoadingPage';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { ArrowBackIosNew } from '@mui/icons-material';
 let restaurant_id;
 function SearchPage() {
   const searchParams=useSearchParams();
@@ -71,16 +72,12 @@ function SearchPage() {
           alt="bgbanner"
           src={maskvector}
           priority
-          className="absolute top-0 left-0 object-cover"
+          className="absolute top-0 -z-20 left-0 object-cover"
         />
-        <div className="flex justify-between items-center p-6" onClick={()=>router.push('/ViewOrder')}>
-          <img
-            src="https://www.baksish.in/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbaksish_logo.b18dc14f.png&w=96&q=75"
-            alt="BakSish"
-            priority="true"
-          />
+        <div className="flex justify-start   items-center text-[#441029] p-6" onClick={()=>router.push('/ViewOrder')}>
+          <ArrowBackIosNew/> Go Back
         </div>
-        <h2 className="text-center mb-2 font-semibold italic text-[#4E0433]">Search your food</h2>
+        <h2 className="text-center mb-2 font-semibold  text-[#4E0433]">Search your food</h2>
         <div className="search px-10 relative">
           <input
             type="text"

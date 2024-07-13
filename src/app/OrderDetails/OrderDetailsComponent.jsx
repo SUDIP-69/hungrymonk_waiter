@@ -13,6 +13,7 @@ import { toast, Toaster } from "react-hot-toast";
 import TimeAgo from "react-timeago";
 import {
   AddCircle,
+  ArrowBackIosNew,
   DeleteForeverRounded,
   RemoveCircle,
   Undo,
@@ -125,9 +126,9 @@ function OrderDetailsComponent() {
         <div className="flex justify-between px-2 items-center">
           <div
             onClick={() => router.push("/ViewOrder")}
-            className="flex justify-between items-center bg-[#FAFAFA] p-2 rounded-lg w-24 shadow-md shadow-[#AFAFAF]"
+            className="flex justify-between items-center p-2 text-base"
           >
-            <Image alt="logo" width={100} height={10000} src={logo} />
+           <ArrowBackIosNew/>Go Back
           </div>
         </div>
       </header>

@@ -60,8 +60,8 @@ function Loginpage() {
             alt="logo"
           />
           <div>
-            <p className="uppercase text-[#441029] tracking-wide text-2xl lg:ml-0 -ml-2 -mt-32 mb-20 px-32">
-              arabikas
+            <p className="uppercase text-[#441029] tracking-widest text-2xl poppins-medium lg:ml-2 ml-3 -mt-32 mb-20 px-32">
+                Baksish
             </p>
           </div>
         </div>

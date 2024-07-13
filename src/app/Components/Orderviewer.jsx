@@ -163,7 +163,7 @@ function Orderviewer({ id, order, restaurant_id }) {
                     onClick={() => {
                       setpopupopened(!popupopened);
                     }}
-                    className="absolute top-2 right-2 text-[#4E0433] hover:scale-95 border-2 border-slate-600 p-1 rounded-xl"
+                    className="absolute top-2 right-2 text-[#4E0433] hover:scale-95  rounded-xl"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -180,7 +180,7 @@ function Orderviewer({ id, order, restaurant_id }) {
                       />
                     </svg>
                   </button>
-                  <h2 className="text-xl font-bold mb-6 text-center">
+                  <h2 className="text-xl font-bold mb-6 text-center text-[#441029]">
                     CONFIRM ORDER
                   </h2>
                   <div className="pb-10">
@@ -198,8 +198,8 @@ function Orderviewer({ id, order, restaurant_id }) {
                       ))}
                     </ul>
                     <section className=" mt-6 mx-4">
-                      <h2 className="pl-1 text-sm italic font-light">
-                        Add notes for the Chef (if you want any) :
+                      <h2 className="pl-1 text-sm  font-normal mb-[4px]">
+                        Add notes for the Chef :
                       </h2>
                       <div className="h-fit min-h-10  bg-white">
                         <textarea

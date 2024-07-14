@@ -5,13 +5,13 @@ import CreateIcon from "@mui/icons-material/Create";
 import logo from "../assets/baksish1.png";
 import TimeAgo from "react-timeago";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import LoadingPage from "../Components/LoadingPage";
 import Link from "next/link";
 import { TaskAlt } from "@mui/icons-material";
-import  noorder from '../assets/noorder.jpg'
- 
+import noorder from "../assets/noorder.jpg";
+
 function ViewOrder() {
   const router = useRouter();
   const [orders, setOrders] = useState(null);
@@ -19,19 +19,26 @@ function ViewOrder() {
   const [servedOrders, setServedOrders] = useState(new Set());
   const [isLoading, setIsLoading] = useState(true); // State to manage loading indicator
   const [error, setError] = useState(null); // State to manage error messages
-
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   const fetchOrders = async () => {
-    const restaurant_id = localStorage.getItem("restaurant_id");
     try {
-      const { data } = await axios.post(`/api/fetchAllOrders`, {
-        restaurant_id,
-      });
-      console.log(data);
+      if (
+        typeof window !== "undefined" &&
+        typeof localStorage !== "undefined"
+      ) {
+        // localStorage is available
+        const restaurant_id = localStorage.getItem("restaurant_id");
+        const { data } = await axios.post(`/api/fetchAllOrders`, {
+          restaurant_id,
+        });
+        console.log(data);
 
-      if (data.success) {
-        setOrders(data.data);
-      } else {
-        setOrders([]);
+        if (data.success) {
+          setOrders(data.data);
+        } else {
+          setOrders([]);
+        }
       }
     } catch (error) {
       console.error("Error fetching orders", error);
@@ -98,7 +105,7 @@ function ViewOrder() {
               <Image alt="logo" width={100} height={10000} src={logo} />
             </div>
             <a onClick={handleClick} className="cursor-pointer text-base">
-             Signout <ExitToAppIcon />
+              Signout <ExitToAppIcon />
             </a>
           </div>
         </div>
@@ -122,7 +129,9 @@ function ViewOrder() {
               <div className="relative">
                 <div
                   onClick={() =>
-                    router.push(`/OrderDetails?order=${tableorder.order_id}`)
+                    router.push(
+                      `/OrderDetails?order=${tableorder.order_id}&restaurant_id=${id}`
+                    )
                   }
                   className="mx-2 pb-3 relative rounded-xl bg-[#ffffff] shadow-md hover:bg-gray-100 cursor-pointer"
                 >
@@ -139,6 +148,8 @@ function ViewOrder() {
                             ? "bg-[#1c4dae]"
                             : tableorder.order_status == "waitingforbill"
                             ? "bg-[#c42b2b]"
+                            : tableorder.order_status == "billgenerated"
+                            ? "bg-gray-600"
                             : "bg-[#ffffff]"
                         } text-white p-2 mr-2`}
                       ></span>
@@ -146,15 +157,19 @@ function ViewOrder() {
                   </div>
                   <div className="px-5 pb-1 text-lg">
                     Status :{" "}
-                    {tableorder.order_status === "updated"
-                      ? "Recently updated"
-                      : tableorder.order_status == "new"
-                      ? "New order"
-                      : tableorder.order_status == "served"
-                      ? "Served"
-                      : tableorder.order_status == "waitingforbill"
-                      ? "Waiting for bill"
-                      : "in progress"}
+                    <span className="font-semibold">
+                      {tableorder.order_status === "updated"
+                        ? "Recently updated"
+                        : tableorder.order_status == "new"
+                        ? "New order"
+                        : tableorder.order_status == "served"
+                        ? "Served"
+                        : tableorder.order_status == "waitingforbill"
+                        ? "Waiting for bill"
+                        : tableorder.order_status == "billgenerated"
+                        ? "Bill generated"
+                        : "in progress"}
+                    </span>
                   </div>
                   <div className="px-5 italic">
                     <span>Placed&nbsp;&nbsp;:&nbsp;&nbsp;</span>
@@ -178,7 +193,8 @@ function ViewOrder() {
                   onClick={() => handleServed(tableorder._id)}
                   className={`z-0 space-x-1 absolute right-2 bottom-1 p-2 py-1 border-2 ${
                     servedOrders.has(tableorder._id) ||
-                    tableorder.order_status == "served"
+                    tableorder.order_status == "served" ||
+                    tableorder.order_status == "billgenerated"
                       ? "bg-green-800"
                       : "bg-blue-500"
                   } shadow-lg poppins-regular text-[0.65rem] rounded-lg text-[#fff9ea] border-white flex justify-center items-center ${
@@ -189,10 +205,12 @@ function ViewOrder() {
                   }`}
                   disabled={
                     servedOrders.has(tableorder._id) ||
-                    tableorder.order_status == "served"
+                    tableorder.order_status == "served" ||
+                    tableorder.order_status == "billgenerated"
                   }
                 >
-                  {tableorder.order_status == "served" ? (
+                  {tableorder.order_status == "served" ||
+                  tableorder.order_status == "billgenerated" ? (
                     <>
                       <TaskAlt />
                       <span>Served</span>
@@ -213,12 +231,7 @@ function ViewOrder() {
           ))
         ) : (
           <div className="flex flex-col justify-center items-center text-xl mt-10">
-            <Image
-              alt="No Orders"
-              src={noorder}
-              width={150}
-              height={150}
-            />
+            <Image alt="No Orders" src={noorder} width={150} height={150} />
             <p>No orders found.</p>
           </div>
         )}

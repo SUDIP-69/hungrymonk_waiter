@@ -18,7 +18,7 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-function Orderviewer({ id, order, restaurant_id }) {
+function Orderviewer({ id, order, restaurant_id ,cgst , sgst}) {
   console.log(id);
   console.log(restaurant_id)
   const dispatch = useDispatch();
@@ -26,6 +26,10 @@ function Orderviewer({ id, order, restaurant_id }) {
   const [table_number, settable_number] = useState("");
 
   const handleplaceorder = async () => {
+    const nettax = (0.01*(
+      cart.totalPrice *
+      (parseFloat(cgst) + parseFloat(sgst))
+    )).toFixed(2);
     if (id == "neworder") {
       const customerId = "CUS_" + uuidv4().toString();
       const orderId = ("ORD_" + uuidv4()).toString();
@@ -39,14 +43,19 @@ function Orderviewer({ id, order, restaurant_id }) {
             items: cart.items,
             notes: notes,
             item_total: cart.totalPrice.toFixed(2),
-            charges: (cart.totalPrice * 0.18).toFixed(2),
-            total_price: (cart.totalPrice * 1.18).toFixed(2),
+            charges: nettax,
+            total_price: (
+              parseFloat(cart.totalPrice) + parseFloat(nettax)
+            ).toFixed(2),
             status: "Confirmed",
           },
         ],
+        total_quantity: cart.totalQuantity,
         initial_bill: cart.totalPrice.toFixed(2),
-        tax: (cart.totalPrice * 0.18).toFixed(2),
-        total_bill: (cart.totalPrice * 1.18).toFixed(2),
+        tax: nettax,
+        total_bill: (parseFloat(cart.totalPrice) + parseFloat(nettax)).toFixed(
+          2
+        ),
       };
       const res = await axios.post("api/createneworder", orderDetails);
       if (res.data.success) {
@@ -65,10 +74,15 @@ function Orderviewer({ id, order, restaurant_id }) {
           items: cart.items,
           notes: notes,
           item_total: cart.totalPrice.toFixed(2),
-          charges: (cart.totalPrice * 0.18).toFixed(2),
-          total_price: (cart.totalPrice * 1.18).toFixed(2),
+          charges: nettax,
+          total_price: (
+            parseFloat(cart.totalPrice) + parseFloat(nettax)
+          ).toFixed(2),
           status: "Confirmed",
         },
+        cgst: cgst,
+        sgst: sgst,
+        new_total_quantity: cart.totalQuantity,
         new_initial_bill: cart.totalPrice.toFixed(2),
       };
       const res = await axios.post("api/updateexistingorder", orderDetails);

@@ -25,18 +25,26 @@ function OrderDetailsComponent() {
   const [orderDetails, setOrderDetails] = useState();
   const [notes, setNotes] = useState("");
   const orderParam = searchParams.get("order");
+  const restaurant_id = searchParams.get("restaurant_id");
   const router = useRouter();
   const [updatedQty, setUpdatedQty] = useState({});
   const [deleteitems, setDeleteItems] = useState([]);
   const [deletedItem, setDeletedItem] = useState(null);
+  const [cgst, setcgst] = useState("");
+  const [sgst, setsgst] = useState("");
 
   useEffect(() => {
-    if (orderParam) {
+    if (orderParam && restaurant_id) {
       const fetchOrder = async () => {
         const res = await axios.post("/api/fetchspecificorder", {
           orderId: orderParam,
         });
         setOrderDetails(res.data.data);
+        const response = await axios.post("/api/fetchmenubyrestid", {
+          restaurant_id,
+        });
+        setcgst(response.data.data.cgst);
+        setsgst(response.data.data.sgst);
       };
       fetchOrder();
     }
@@ -100,12 +108,21 @@ function OrderDetailsComponent() {
     });
 
     if (res.data.success) {
-      toast.success("Order confirmed");
-      const res = await axios.post("/api/fetchspecificorder", {
+      const updateres = await axios.post("/api/updatetaxandquantity", {
         orderId: orderParam,
+        cgst: cgst,
+        sgst: sgst,
       });
-      if (res.data.success) {
-        setOrderDetails(res.data.data);
+      if (updateres.data.success) {
+        toast.success("Order confirmed");
+        const res = await axios.post("/api/fetchspecificorder", {
+          orderId: orderParam,
+        });
+        if (res.data.success) {
+          setOrderDetails(res.data.data);
+        }
+      } else {
+        toast.error("Failed to confirm order");
       }
     } else {
       toast.error("Failed to confirm order");
@@ -128,7 +145,8 @@ function OrderDetailsComponent() {
             onClick={() => router.push("/ViewOrder")}
             className="flex justify-between items-center p-2 text-base"
           >
-           <ArrowBackIosNew/>Go Back
+            <ArrowBackIosNew />
+            Go Back
           </div>
         </div>
       </header>
@@ -142,7 +160,7 @@ function OrderDetailsComponent() {
           orderDetails[0].order_items.map((order, i) => (
             <div
               key={i}
-              className="max-w-md mx-auto px-6 py-3 mt-4 rounded-lg shadow-md"
+              className="max-w-md mx-auto px-4 py-3 mt-4 rounded-lg shadow-md"
             >
               <ul className="mb-4 ">
                 {order.items.map((item, j) => (
@@ -155,27 +173,29 @@ function OrderDetailsComponent() {
                     <span>{item.food.name}&nbsp;</span>
                     <span>
                       <span className="space-x-2">
-                        {order.status === "Ordered" && !deleteitems.includes(item._id) && (
-                          <span className="text-[#441029]">
-                            <RemoveCircle
-                              onClick={() =>
-                                handleUpdateremove(item._id, item.quantity)
-                              }
-                            />
-                          </span>
-                        )}
+                        {order.status === "Ordered" &&
+                          !deleteitems.includes(item._id) && (
+                            <span className="text-[#441029]">
+                              <RemoveCircle
+                                onClick={() =>
+                                  handleUpdateremove(item._id, item.quantity)
+                                }
+                              />
+                            </span>
+                          )}
                         <span className="w-[10px]">
-                          {updatedQty[item._id] ?? item.quantity}
+                          x {updatedQty[item._id] ?? item.quantity}
                         </span>
-                        {order.status === "Ordered" && !deleteitems.includes(item._id) && (
-                          <span className="text-[#441029]">
-                            <AddCircle
-                              onClick={() => {
-                                handleUpdateAdd(item._id, item.quantity);
-                              }}
-                            />
-                          </span>
-                        )}
+                        {order.status === "Ordered" &&
+                          !deleteitems.includes(item._id) && (
+                            <span className="text-[#441029]">
+                              <AddCircle
+                                onClick={() => {
+                                  handleUpdateAdd(item._id, item.quantity);
+                                }}
+                              />
+                            </span>
+                          )}
                       </span>
                       {order.status === "Ordered" && (
                         <span className="text-[#e73336] mx-2">

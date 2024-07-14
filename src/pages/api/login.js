@@ -24,10 +24,10 @@ const handler = async (req, res) => {
               restaurant_id: users.restaurant_id
             });
           } else {
-            res.json({ success: false, token: null });
+            res.status(200).json({ success: false, token: null });
           }
         } else {
-          res.json({ success: false });
+          res.status(200).json({ success: false });
         }
       } else {
         res.status(201).json({ success: false, token: null });

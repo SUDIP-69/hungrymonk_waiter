@@ -3,6 +3,7 @@ import React from "react";
 import TimeAgo from "react-timeago";
 import { useRouter } from "next/navigation";
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import toast from "react-hot-toast";
 
 function DetailedView({ orders }) {
   // console.log(orders);
@@ -10,11 +11,13 @@ function DetailedView({ orders }) {
 
   const handleClick = (ord) => {
     const encodedOrder = encodeURIComponent(JSON.stringify(ord));
+    toast.dismiss();
     router.push(`/OrderDetails?order=${encodedOrder}`);
   };
 
   return (
     <div>
+      <Toaster/>
       {orders?.map((items, i) => (
         <div key={i} className="space-y-2 ">
           {items?.order_items?.map((ord, ind) => (

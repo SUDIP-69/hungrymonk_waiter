@@ -28,11 +28,12 @@ function Loginpage() {
       } = await axios.post("/api/login", { username: user, password });
 
       if (success) {
+        toast.success("Successfully logged in", { id: toastId });
         localStorage.setItem("restaurant_id", restaurant_id);
         setpassword("");
         setuser("");
-        toast.success("Successfully logged in", { id: toastId });
         localStorage.setItem("accessToken", token);
+        toast.dismiss();
         router.push(`/ViewOrder?id=${restaurant_id}`);
       } else {
         toast.error("Failed to login", { id: toastId });

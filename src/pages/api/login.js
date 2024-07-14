@@ -15,7 +15,7 @@ const handler = async (req, res) => {
           const ismatch = await bcrypt.compare(password, users.password);
           //console.log(ismatch);
           if (ismatch) {
-            const token = jwt.sign({ name: users.name }, "qwerty");
+            const token = jwt.sign({ name: users.name },process.env.JWT_SECRET_KEY);
             
             //console.log(token);
             res.json({

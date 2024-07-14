@@ -18,7 +18,7 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-function Orderviewer({ id, order, restaurant_id ,cgst , sgst}) {
+function Orderviewer({ id, order, restaurant_id ,cgst , sgst, nooftables}) {
   //console.log(id);
   //console.log(restaurant_id)
   const dispatch = useDispatch();
@@ -63,13 +63,14 @@ function Orderviewer({ id, order, restaurant_id ,cgst , sgst}) {
         setTimeout(() => {
           dispatch(clearCart());
         }, 2000);
-        router.push(`/OrderDetails?order=${orderId}&restaurant_id=${restaurant_id}`);
+        toast.dismiss();
+        router.push(`/OrderDetails?order=${orderId}&id=${restaurant_id}`);
       } else {
         toast.error(res.data.error);
       }
     } else {
       const orderDetails = {
-        order_id: id,
+        order_id: order,
         new_order_items: {
           items: cart.items,
           notes: notes,
@@ -92,7 +93,8 @@ function Orderviewer({ id, order, restaurant_id ,cgst , sgst}) {
         setTimeout(() => {
           dispatch(clearCart());
         }, 2000);
-        router.push(`/OrderDetails?order=${order}&restaurant_id=${restaurant_id}`);
+        toast.dismiss();
+        router.push(`/OrderDetails?order=${order}&id=${restaurant_id}`);
       } else {
         toast.error(res.data.error);
       }
@@ -267,9 +269,14 @@ function Orderviewer({ id, order, restaurant_id ,cgst , sgst}) {
                     <div>
                       <input
                         type="number"
-                        value={table_number}
-                        onChange={(e) => settable_number(e.target.value)}
+                        value={table_number != "" ? table_number : ''}
+                        onChange={(e) => {
+                          const value = Math.max(0, Math.min(30, e.target.value));
+                          settable_number(value);
+                        }}
                         className="border-2 border-[#661268] rounded-lg px-4 py-2 w-28"
+                        min="0"
+                        max={nooftables}
                       />
                     </div>
                   </div>}

@@ -21,23 +21,34 @@ const handler = async (req, res) => {
           },
         },
       });
+      let newupdatedSingleOrder;
       if (orders.length > 0) {
         const o = orders[0].order_items;
+        console.log(orders[0])
+        const calculatedtaxrate=(0.01*(parseFloat(cgst)+parseFloat(sgst))).toFixed(2);
         let totquantity = 0;
         let price = 0;
         for (let i = 0; i < o.length; i++) {
           const item = o[i];
+          let itotal=0,fprice=0,charges=0;
           //console.log(item)
           for (let j = 0; j < item.items.length; j++) {
+            itotal +=parseFloat(item.items[j]?.quantity) *
+            parseFloat(item.items[j]?.food.price);
+
             // console.log(item.items.length)
             totquantity += parseFloat(item.items[j]?.quantity);
             price +=
               parseFloat(item.items[j]?.quantity) *
               parseFloat(item.items[j]?.food.price);
           }
+          charges=(parseFloat(itotal) * parseFloat(calculatedtaxrate)).toFixed(2);
+          fprice=(parseFloat(itotal) + parseFloat(charges)).toFixed(2);
+          newupdatedSingleOrder = await SingleOrders.findByIdAndUpdate(item._id,{item_total:itotal,charges:charges,total_price:fprice});
+          console.log(i)
         }
       //  console.log(totquantity, price);
-        const calculatedtaxrate=(0.01*(parseFloat(cgst)+parseFloat(sgst))).toFixed(2);
+        
         const tax = (parseFloat(price) * parseFloat(calculatedtaxrate)).toFixed(2);
         const total_bill = (parseFloat(price) + parseFloat(tax)).toFixed(2);
         const newupdatedpriceorder= await Orders.findOneAndUpdate({order_id:orderId},{initial_bill:price,tax:tax,total_bill:total_bill,total_quantity:totquantity});

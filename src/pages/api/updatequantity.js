@@ -4,7 +4,7 @@ import OrderFoodItems from "../../../models/OrderFoodItems";
 const handler = async (req, res) => {
   if (req.method === "POST") {
     const { updatedQty } = req.body;
-   // console.log(updatedQty);
+    console.log(updatedQty);
 
     try {
       for (const id in updatedQty) {

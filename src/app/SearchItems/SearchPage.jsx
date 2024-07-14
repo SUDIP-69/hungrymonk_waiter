@@ -19,7 +19,7 @@ function SearchPage() {
   const [error, setError] = useState(null);
   const [cgst, setcgst] = useState("");
   const [sgst, setsgst] = useState("");
-
+  const [nooftables, setnooftables] = useState("");
   const id=searchParams.get('id');
   const orderParam = searchParams.get("order");
   const router=useRouter();
@@ -35,6 +35,7 @@ function SearchPage() {
         setFilteredItems(res.data.data.food_items);
         setcgst(res.data.data.cgst);
         setsgst(res.data.data.sgst);
+        setnooftables(res.data.data.nooftables);
       }
       setLoading(false);
     } catch (err) {
@@ -101,7 +102,7 @@ function SearchPage() {
           ))}
         </div>
       </div>
-      <Orderviewer id={id} order={orderParam} restaurant_id={restaurant_id} cgst={cgst} sgst={sgst}/>
+      <Orderviewer id={id} order={orderParam} restaurant_id={restaurant_id} cgst={cgst} sgst={sgst} nooftables={nooftables}/>
     </div>
   );
 }

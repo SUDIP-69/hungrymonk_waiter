@@ -21,18 +21,19 @@ import {
 import { Tooltip } from "@mui/material";
 
 function OrderDetailsComponent() {
+  
   const searchParams = useSearchParams();
   const [orderDetails, setOrderDetails] = useState();
   const [notes, setNotes] = useState("");
   const orderParam = searchParams.get("order");
-  const restaurant_id = searchParams.get("restaurant_id");
+  const restaurant_id = searchParams.get("id");
   const router = useRouter();
   const [updatedQty, setUpdatedQty] = useState({});
   const [deleteitems, setDeleteItems] = useState([]);
   const [deletedItem, setDeletedItem] = useState(null);
   const [cgst, setcgst] = useState("");
   const [sgst, setsgst] = useState("");
-
+  
   useEffect(() => {
     if (orderParam && restaurant_id) {
       const fetchOrder = async () => {
@@ -96,6 +97,7 @@ function OrderDetailsComponent() {
   };
 
   const handleConfirmOrder = async (singleOrderId) => {
+    toast.loading("Confirming order");
     if (updatedQty) {
       await axios.post("/api/updatequantity", { updatedQty });
     }
@@ -114,6 +116,7 @@ function OrderDetailsComponent() {
         sgst: sgst,
       });
       if (updateres.data.success) {
+        toast.dismiss();
         toast.success("Order confirmed");
         const res = await axios.post("/api/fetchspecificorder", {
           orderId: orderParam,
@@ -122,9 +125,11 @@ function OrderDetailsComponent() {
           setOrderDetails(res.data.data);
         }
       } else {
+        toast.dismiss();
         toast.error("Failed to confirm order");
       }
     } else {
+      toast.dismiss();
       toast.error("Failed to confirm order");
     }
   };
@@ -142,8 +147,8 @@ function OrderDetailsComponent() {
       <header className="bg-[#4E0433] py-4 text-white poppins-bold tracking-widest text-center text-2xl">
         <div className="flex justify-between px-2 items-center">
           <div
-            onClick={() => router.push("/ViewOrder")}
-            className="flex justify-between items-center p-2 text-base"
+            onClick={() => router.push(`/ViewOrder?id=${restaurant_id}`)}
+            className="cursor-pointer flex justify-between items-center p-2 text-base"
           >
             <ArrowBackIosNew />
             Go Back
@@ -158,8 +163,8 @@ function OrderDetailsComponent() {
         <hr className="h-[2px] mb-6 mx-auto bg-[#4E0433] rounded-2xl w-32" />
         {orderDetails[0] &&
           orderDetails[0].order_items.map((order, i) => (
-            <div
-              key={i}
+            <div key={i}>{parseFloat(order.items[0].quantity)>0 && <div
+              
               className="max-w-md mx-auto px-4 py-3 mt-4 rounded-lg shadow-md"
             >
               <ul className="mb-4 ">
@@ -255,11 +260,11 @@ function OrderDetailsComponent() {
                   </button>
                 </div>
               )}
-            </div>
+            </div>}</div>
           ))}
         <div className="mt-8 space-x-1 mb-6">
           <Link
-            href={`/SearchItems?id=${orderDetails[0].order_id}&order=${orderParam}`}
+            href={`/SearchItems?order=${orderParam}&id=${restaurant_id}`}
             className="mx-auto"
           >
             <button className="mx-auto p-2 border-2 text-lg border-[#661268] shadow-lg poppins-semibold rounded-lg text-black flex justify-center items-center ">

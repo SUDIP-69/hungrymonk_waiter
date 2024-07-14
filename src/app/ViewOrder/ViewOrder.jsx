@@ -69,8 +69,10 @@ function ViewOrder() {
   };
 
   const handleClick = (e) => {
+    toast.success("Signing out")
     e.preventDefault();
     localStorage.removeItem("accessToken");
+    toast.dismiss();
     router.push("/");
   };
 
@@ -107,7 +109,7 @@ function ViewOrder() {
           <div className="flex justify-between items-center">
             <div
               className="bg-[#FAFAFA] p-2 rounded-lg w-24 shadow-md shadow-[#AFAFAF] cursor-pointer"
-              onClick={() => router.push("/ViewOrder")}
+              onClick={() => {toast.dismiss();router.push(`/ViewOrder?&id=${id}`)}}
             >
               <Image alt="logo" width={100} height={10000} src={logo} />
             </div>
@@ -135,11 +137,11 @@ function ViewOrder() {
             <div key={index}>
               <div className="relative">
                 <div
-                  onClick={() =>
+                  onClick={() =>{toast.dismiss();
                     router.push(
-                      `/OrderDetails?order=${tableorder.order_id}&restaurant_id=${id}`
+                      `/OrderDetails?order=${tableorder.order_id}&id=${id}`
                     )
-                  }
+                  }}
                   className="mx-2 pb-3 relative rounded-xl bg-[#ffffff] shadow-md hover:bg-gray-100 cursor-pointer"
                 >
                   <div className="flex justify-between w-full px-5 pt-5 pb-2 text-left text-[#565556] text-xl poppins-semibold ">

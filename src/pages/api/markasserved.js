@@ -1,13 +1,13 @@
 import conndb from "../../../middleware/conndb";
 import Orders from "../../../models/Orders";
-import { FoodItems } from "../../../models/FoodItems";
+import FoodItems from "../../../models/FoodItems";
 import SingleOrders from "../../../models/SingleOrders";
 import OrderFoodItems from "../../../models/OrderFoodItems";
 
 const handler = async (req, res) => {
   if (req.method == "POST") {
     try {
-        console.log(req.body);
+        //console.log(req.body);
       const id = req.body.id;
       const order = await Orders.findByIdAndUpdate(id, {
         order_status: "served",

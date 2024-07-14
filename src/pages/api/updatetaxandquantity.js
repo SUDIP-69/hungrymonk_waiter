@@ -2,12 +2,12 @@ import conndb from "../../../middleware/conndb";
 import Orders from "../../../models/Orders";
 import SingleOrders from "../../../models/SingleOrders";
 import OrderFoodItems from "../../../models/OrderFoodItems";
-import { FoodItems } from "../../../models/FoodItems";
+import FoodItems from "../../../models/FoodItems";
 import RestaurantItems from "../../../models/RestaurantItems";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
-    console.log(req.body);
+   // console.log(req.body);
     try {
       const { orderId ,cgst,sgst} = req.body;
       
@@ -36,7 +36,7 @@ const handler = async (req, res) => {
               parseFloat(item.items[j]?.food.price);
           }
         }
-        console.log(totquantity, price);
+      //  console.log(totquantity, price);
         const calculatedtaxrate=(0.01*(parseFloat(cgst)+parseFloat(sgst))).toFixed(2);
         const tax = (parseFloat(price) * parseFloat(calculatedtaxrate)).toFixed(2);
         const total_bill = (parseFloat(price) + parseFloat(tax)).toFixed(2);

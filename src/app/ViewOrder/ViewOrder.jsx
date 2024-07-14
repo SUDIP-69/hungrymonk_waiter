@@ -11,6 +11,7 @@ import LoadingPage from "../Components/LoadingPage";
 import Link from "next/link";
 import { TaskAlt } from "@mui/icons-material";
 import noorder from "../assets/noorder.jpg";
+import toast, { Toaster } from "react-hot-toast";
 
 function ViewOrder() {
   const router = useRouter();
@@ -32,7 +33,7 @@ function ViewOrder() {
         const { data } = await axios.post(`/api/fetchAllOrders`, {
           restaurant_id,
         });
-        console.log(data);
+        //console.log(data);
 
         if (data.success) {
           setOrders(data.data);
@@ -74,17 +75,22 @@ function ViewOrder() {
   };
 
   const handleServed = async (orderId) => {
+    if(confirm("Are you sure you want to mark this order as served")){
     try {
       const response = await axios.post(`/api/markasserved`, { id: orderId });
       if (response.data.success) {
+        toast.success("Marked as served");
         setServedOrders((prev) => new Set(prev).add(orderId));
-        fetchOrders(); // Fetch updated orders after marking as served
+        setTimeout(() => {
+          fetchOrders(); // Fetch updated orders after marking as served
+        }, 2000);
+        
       } else {
         console.error("Error marking order as served");
       }
     } catch (error) {
       console.error("Error marking order as served", error);
-    }
+    }}
   };
 
   const sortedOrders = orders?.sort((a, b) => {
@@ -94,9 +100,10 @@ function ViewOrder() {
   });
 
   return (
-    <>
+    <><Toaster/>
       <header className="bg-[#4E0433] p-4 text-white poppins-bold tracking-widest text-center text-2xl">
         <div>
+          
           <div className="flex justify-between items-center">
             <div
               className="bg-[#FAFAFA] p-2 rounded-lg w-24 shadow-md shadow-[#AFAFAF] cursor-pointer"

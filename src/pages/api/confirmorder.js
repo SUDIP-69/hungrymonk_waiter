@@ -1,14 +1,14 @@
 import conndb from "../../../middleware/conndb";
-import Orders from "../../../models/Orders";
 import SingleOrders from "../../../models/SingleOrders";
+
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
-    console.log(req.body)
+    //console.log(req.body)
     const {singleOrderId } = req.body;
     try {
       const order = await SingleOrders.findByIdAndUpdate(singleOrderId,{status:"Confirmed" });
-      console.log(order)
+      //console.log(order)
       if (!order) {
         return res.status(404).json({ success: false, message: "Order not found" });
       }

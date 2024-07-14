@@ -4,11 +4,11 @@ import SingleOrders from "../../../models/SingleOrders";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
-    console.log(req.body)
+    //console.log(req.body)
     const {orderId } = req.body;
     try {
       const order = await Orders.findOneAndUpdate({order_id: orderId},{order_status:"waitingforbill"});
-      console.log(order)
+      //console.log(order)
       if (!order) {
         res.status(404).json({ success: false, message: "Order not found" });
       }

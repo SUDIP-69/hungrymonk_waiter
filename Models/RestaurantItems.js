@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import FoodItems from './FoodItems';
 const restaurantItemsSchema = new mongoose.Schema({
     restaurant_id: {
         type: String,

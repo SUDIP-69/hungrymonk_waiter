@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { singleOrders } from "./SingleOrders";
+import SingleOrders from "./SingleOrders";
+
 const orders = new mongoose.Schema(
   {
     customer_id: {

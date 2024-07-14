@@ -17,7 +17,7 @@ const handler = async (req, res) => {
         const objectId = new mongoose.Types.ObjectId(itemId);
         // Validate if itemId is a valid ObjectId string
         if (!mongoose.Types.ObjectId.isValid(objectId)) {
-          console.log(`Invalid ObjectId: ${objectId}`);
+          //console.log(`Invalid ObjectId: ${objectId}`);
           continue; // Skip this item and move to the next
         }
 
@@ -28,7 +28,7 @@ const handler = async (req, res) => {
         if (deletedItem) {
           deletedItems.push(deletedItem);
         } else {
-          console.log(`Item with ID ${itemId} not found.`);
+          //console.log(`Item with ID ${itemId} not found.`);
         }
       }
 

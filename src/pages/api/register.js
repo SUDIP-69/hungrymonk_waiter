@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 const handler =async (req, res) => {
   try {
     if (req.method == "POST") {
-      console.log(req.body)
+      //console.log(req.body)
       const { username, password, email, name, phoneNo,restaurant_id } = req.body;
     //   console.log(username, password, email, name, phoneNo,resID);
       const passwordhashed = await bcrypt.hash(password, 10)

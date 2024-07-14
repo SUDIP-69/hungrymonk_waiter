@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { fooditems } from './FoodItems';
+import FoodItems from './FoodItems';
 
 
 export const singleOrders = new mongoose.Schema({

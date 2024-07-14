@@ -19,8 +19,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 function Orderviewer({ id, order, restaurant_id ,cgst , sgst}) {
-  console.log(id);
-  console.log(restaurant_id)
+  //console.log(id);
+  //console.log(restaurant_id)
   const dispatch = useDispatch();
   const router = useRouter();
   const [table_number, settable_number] = useState("");
@@ -63,7 +63,7 @@ function Orderviewer({ id, order, restaurant_id ,cgst , sgst}) {
         setTimeout(() => {
           dispatch(clearCart());
         }, 2000);
-        router.push(`/OrderDetails?order=${orderId}`);
+        router.push(`/OrderDetails?order=${orderId}&restaurant_id=${restaurant_id}`);
       } else {
         toast.error(res.data.error);
       }
@@ -86,13 +86,13 @@ function Orderviewer({ id, order, restaurant_id ,cgst , sgst}) {
         new_initial_bill: cart.totalPrice.toFixed(2),
       };
       const res = await axios.post("api/updateexistingorder", orderDetails);
-      console.log(res.data);
+      //console.log(res.data);
       if (res.data.success) {
         toast.success("Items added");
         setTimeout(() => {
           dispatch(clearCart());
         }, 2000);
-        router.push(`/OrderDetails?order=${order}`);
+        router.push(`/OrderDetails?order=${order}&restaurant_id=${restaurant_id}`);
       } else {
         toast.error(res.data.error);
       }
@@ -160,7 +160,7 @@ function Orderviewer({ id, order, restaurant_id ,cgst , sgst}) {
           <button
             onClick={() => {
               setpopupopened(!popupopened);
-              console.log(cart);
+              //console.log(cart);
             }}
             className="px-6 py-2 mt-2 bg-white border-2 rounded-md text-[#6C0345] border-[#6C0345]"
           >

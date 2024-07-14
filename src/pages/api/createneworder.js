@@ -108,7 +108,7 @@ import conndb from "../../../middleware/conndb";
 import Orders from "../../../models/Orders";
 import SingleOrders from "../../../models/SingleOrders";
 import OrderFoodItems from "../../../models/OrderFoodItems";
-import { FoodItems } from "../../../models/FoodItems";
+import FoodItems from "../../../models/FoodItems";
 import RestaurantItems from "../../../models/RestaurantItems";
 
 const handler = async (req, res) => {
@@ -146,7 +146,7 @@ const handler = async (req, res) => {
       }
 
       // Save OrderFoodItems and collect their IDs
-      console.log()
+      // console.log()
       const orderFoodItemsPromises = order_items.map(async (item) => {
         const orderFoodItems = await Promise.all(item.items.map(async (foodItem) => {
           const newOrderFoodItem = new OrderFoodItems({

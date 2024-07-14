@@ -29,7 +29,7 @@ function SearchPage() {
       const res= await axios.post('/api/fetchmenubyrestid', {restaurant_id});
       // setfooditems(data.data.food_items);
       // setFilteredItems(data.data.food_items);
-      console.log(res.data)
+      //console.log(res.data)
       if(res.data.success){
         setfooditems(res.data.data.food_items);
         setFilteredItems(res.data.data.food_items);

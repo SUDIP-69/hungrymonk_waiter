@@ -35,7 +35,8 @@ function OrderDetailsComponent() {
   const [sgst, setsgst] = useState("");
   
   useEffect(() => {
-    if (orderParam && restaurant_id) {
+    const token=localStorage.getItem("accessToken");
+    if (orderParam && restaurant_id && token) {
       const fetchOrder = async () => {
         const res = await axios.post("/api/fetchspecificorder", {
           orderId: orderParam,
@@ -49,7 +50,10 @@ function OrderDetailsComponent() {
       };
       fetchOrder();
     }
-  }, [orderParam]);
+    else{
+      router.push("/");
+    }
+  }, []);
 
   const generateBill = async () => {
     const res = await axios.post("/api/generatebillfororder", {

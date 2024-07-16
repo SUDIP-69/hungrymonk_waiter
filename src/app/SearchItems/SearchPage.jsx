@@ -46,7 +46,13 @@ function SearchPage() {
   };
 
   useEffect(() => {
+    const token=localStorage.getItem("accessToken");
+    if(token){
     fetchfoodmenu();
+    }
+    else{
+      router.push("/");
+    }
   }, []);
 
   useEffect(() => {
@@ -80,8 +86,8 @@ function SearchPage() {
           priority
           className="absolute top-0 -z-20 left-0 object-cover"
         />
-        <div className="flex justify-start   items-center text-[#441029] p-6" onClick={()=>router.push('/ViewOrder')}>
-          <ArrowBackIosNew/> Go Back
+        <div className="flex justify-start  items-center text-[#441029] p-6">
+          <span className='cursor-pointer'  onClick={()=>router.push(`/ViewOrder?id=${id}`)}><ArrowBackIosNew/> Go Back</span>
         </div>
         <h2 className="text-center mb-2 font-semibold  text-[#4E0433]">Search your food</h2>
         <div className="search px-10 relative">

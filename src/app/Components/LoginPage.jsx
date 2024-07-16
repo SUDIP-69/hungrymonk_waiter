@@ -33,8 +33,7 @@ function Loginpage() {
         setpassword("");
         setuser("");
         localStorage.setItem("accessToken", token);
-        toast.dismiss();
-        router.push(`/ViewOrder?id=${restaurant_id}`);
+        window.location=`/ViewOrder?id=${restaurant_id}`;
       } else {
         toast.error("Failed to login", { id: toastId });
         window.location.reload();

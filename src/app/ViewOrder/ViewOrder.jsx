@@ -50,23 +50,50 @@ function ViewOrder() {
     }
   };
 
+  // useEffect(() => {
+  //   if (!localStorage.getItem("accessToken")) {
+  //     window.location = "/";
+  //   } else {
+  //     fetchOrders();
+
+  //     const intervalId = setInterval(() => {
+  //       fetchOrders();
+  //     }, 30000);
+
+  //     return () => clearInterval(intervalId);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    if (!localStorage.getItem("accessToken")) {
-      window.location = "/";
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      router.push("/");
     } else {
-      fetchOrders();
+      axios.post('/api/verifyjwt', { token })
+        .then(response => {
+          if (response.data.success) {
+            fetchOrders();
+            const intervalId = setInterval(() => {
+              fetchOrders();
+            }, 30000);
 
-      const intervalId = setInterval(() => {
-        fetchOrders();
-      }, 30000);
-
-      return () => clearInterval(intervalId);
+            return () => clearInterval(intervalId);
+          } else {
+            router.push("/");
+            localStorage.removeItem("accessToken");
+          }
+        })
+        .catch(error => {
+          console.error("Token verification failed", error);
+          localStorage.removeItem("accessToken");
+          router.push("/");
+        });
     }
-  }, []);
+ },[]);
 
-  const handleToggle = (id) => {
-    setOpenAccordion(openAccordion === id ? null : id);
-  };
+  // const handleToggle = (id) => {
+  //   setOpenAccordion(openAccordion === id ? null : id);
+  // };
 
   const handleClick = (e) => {
     toast.success("Signing out")

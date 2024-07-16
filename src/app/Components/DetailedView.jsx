@@ -3,7 +3,7 @@ import React from "react";
 import TimeAgo from "react-timeago";
 import { useRouter } from "next/navigation";
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 function DetailedView({ orders }) {
   // console.log(orders);
